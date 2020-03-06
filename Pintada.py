@@ -6,9 +6,9 @@ from imblearn.over_sampling import SMOTE
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import preprocessing
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
+from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
 
 # Load dataset
 df = pd.read_csv('Datos originales_conectividad.csv')
@@ -36,16 +36,17 @@ X_train, X_test, y_train, y_test = train_test_split(x1, y1, test_size=0.30)
 
 # Show best characteristics
 X_clf_new = SelectKBest(score_func=chi2, k=8).fit_transform(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
-print(X_clf_new[0])
-print(X_train[0])
+# print(X_clf_new[0])
+# print(X_train[0])
 
 X_train, y_train = SMOTE().fit_resample(X_train, y_train)
 
 # Predict with Random Forest
+print('Prediction RF')
 RF = RandomForestClassifier(bootstrap=True)
 RF.fit(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
 pred_RF = RF.predict(X_test[:, [8, 9, 11, 12, 13, 14, 17, 18]])
-print(RF.feature_importances_)
+# print(RF.feature_importances_)
 print(classification_report(y_test, pred_RF))
 
 # Select best characteristics
@@ -66,16 +67,28 @@ plt.plot(range(1, 150), error, color='red', linestyle='dashed', marker='o', mark
 plt.title('Error Rate K Value')
 plt.xlabel('K Value')
 plt.ylabel('Mean Error')
-plt.show()
+# plt.show()
 k = (error.index(min(error))) + 1
-print(k)
+
 
 # Predict with KNN
-classifier = KNeighborsClassifier(n_neighbors=k)
-classifier.fit(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
-y_pred = classifier.predict(X_test[:, [8, 9, 11, 12, 13, 14, 17, 18]])
+print('Prediction KNN')
+KNN = KNeighborsClassifier(n_neighbors=k)
+KNN.fit(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
+y_pred = KNN.predict(X_test[:, [8, 9, 11, 12, 13, 14, 17, 18]])
 print(confusion_matrix(y_test, y_pred))
 print(classification_report(y_test, y_pred))
+
+# Predict with SVM
+print('Prediction SVM')
+svm = SVC(C=1.0, kernel='rbf', degree=3, gamma='scale', coef0=0.0, shrinking=True, probability=False, tol=0.001,
+          cache_size=200, class_weight=None, verbose=False, max_iter=-1, decision_function_shape='ovr', break_ties=False, random_state=None)
+svm.fit(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
+pred_svm = svm.predict(X_test[:, [8, 9, 11, 12, 13, 14, 17, 18]])
+confusion_svm = confusion_matrix(y_test, pred_svm)
+print(classification_report(y_test, pred_svm))
+
+
 
 # Create dataframes with Xtrain and Xtest
 labels_df = df.columns.values

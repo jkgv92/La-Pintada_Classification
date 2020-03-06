@@ -26,7 +26,7 @@ df.iloc[:, 5:21] = x_scaled
 df.head()
 
 # Select desired characteristics
-x1 = df.iloc[:, [5, 7, 11, 12, 13]].values
+x1 = df.iloc[:, [8,9,11,12,13,14,17,18]].values
 y1 = df.iloc[:, -1].values
 # x2 = df.iloc[500:, :-1].values
 # y2 = df.iloc[500:, -1].values
@@ -35,9 +35,9 @@ y1 = df.iloc[:, -1].values
 X_train, X_test, y_train, y_test = train_test_split(x1, y1, test_size=0.30)
 
 # Show best characteristics
-X_clf_new = SelectKBest(score_func=chi2, k=5).fit_transform(X_train, y_train)
-print(X_clf_new[:5])
-print(X_train[:5])
+X_clf_new = SelectKBest(score_func=chi2, k=8).fit_transform(X_train, y_train)
+print(X_clf_new[1])
+print(X_train[1])
 
 
 # Predict with Random Forest

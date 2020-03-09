@@ -1,7 +1,7 @@
 #!/home/programacion4/.linuxbrew/bin/python3
 #PBS -N Pintada
-#PBS -o Pintada.out
-#PBS -e Pintada.err
+#PBS -o Pintadaout.txt
+#PBS -e Pintadaerr.txt
 
 import numpy as np
 import pandas as pd

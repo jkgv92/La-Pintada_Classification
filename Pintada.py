@@ -1,4 +1,7 @@
 #!/home/programacion4/.linuxbrew/bin/python3
+#PBS -N Pintada
+#PBS -o Pintada.out
+#PBS -e Pintada.err
 
 import numpy as np
 import pandas as pd
@@ -13,7 +16,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 
 # Load dataset
-df = pd.read_csv('Datos originales_conectividad.csv')
+df = pd.read_csv('/home/programacion4/La-Pintada_Classification/Datos originales_conectividad.csv')
 
 # Select columns with characteristics
 df = df.iloc[:, 2:]
@@ -100,8 +103,8 @@ X_test_pd = pd.DataFrame(data=X_test[:, :],  # values
                          columns=labels_df)  # 1st row as the column names
 
 # Export dataframes as excel sheets
-X_test_pd.to_excel("X_test.xlsx")
-X_train_pd.to_excel("X_train.xlsx")
+X_test_pd.to_excel("/home/programacion4/La-Pintada_Classification/X_test.xlsx")
+X_train_pd.to_excel("/home/programacion4/La-Pintada_Classification/X_train.xlsx")
 
 # Export prediction vector
-y_pred.tofile('y_pred.csv', sep=',', format='%10.5f')
+y_pred.tofile('/home/programacion4/La-Pintada_Classification/y_pred.csv', sep=',', format='%10.5f')

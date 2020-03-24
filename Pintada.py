@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 
 # Load dataset
-df = pd.read_csv('/home/programacion4/La-Pintada_Classification/Datos originales_conectividad.csv')
+df = pd.read_csv('Datos originales_conectividad.csv')
 
 # Select columns with characteristics
 df = df.iloc[:, 2:]
@@ -41,17 +41,17 @@ X_train, X_test, y_train, y_test = train_test_split(x1, y1, test_size=0.30)
 
 # Show best characteristics
 X_clf_new = SelectKBest(score_func=chi2, k=8).fit_transform(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
-# print(X_clf_new[0])
+# # print(X_clf_new[0])
 # print(X_train[0])
 
 X_train, y_train = SMOTE().fit_resample(X_train, y_train)
 
 # Predict with Random Forest
 print('Prediction RF')
-RF = RandomForestClassifier(bootstrap=True)
+RF = RandomForestClassifier(bootstrap=False)
 RF.fit(X_train[:, [8, 9, 11, 12, 13, 14, 17, 18]], y_train)
 pred_RF = RF.predict(X_test[:, [8, 9, 11, 12, 13, 14, 17, 18]])
-# print(RF.feature_importances_)
+print(RF.feature_importances_)
 print(classification_report(y_test, pred_RF))
 
 # Select best characteristics
@@ -103,8 +103,8 @@ X_test_pd = pd.DataFrame(data=X_test[:, :],  # values
                          columns=labels_df)  # 1st row as the column names
 
 # Export dataframes as excel sheets
-X_test_pd.to_excel("/home/programacion4/La-Pintada_Classification/X_test.xlsx")
-X_train_pd.to_excel("/home/programacion4/La-Pintada_Classification/X_train.xlsx")
+X_test_pd.to_excel("X_test.xlsx")
+X_train_pd.to_excel("X_train.xlsx")
 
 # Export prediction vector
-y_pred.tofile('/home/programacion4/La-Pintada_Classification/y_pred.csv', sep=',', format='%10.5f')
+y_pred.tofile('y_pred.csv', sep=',', format='%10.5f')
